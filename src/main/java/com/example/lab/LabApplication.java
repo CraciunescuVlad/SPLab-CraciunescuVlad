@@ -26,7 +26,4 @@ public class LabApplication {
         noapteBuna.print();
     }
 
-
-
-    //test branch
 }
