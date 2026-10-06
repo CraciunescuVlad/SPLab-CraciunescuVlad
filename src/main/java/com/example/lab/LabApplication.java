@@ -23,6 +23,19 @@ public class LabApplication {
         cap111.add(new Paragraph("Text from subchapter 1.1.1"));
         cap111.add(cap1111);
         cap1111.add(new Image("Image subchapter 1.1.1.1"));
+
+        Paragraph p1 = new Paragraph("Text aliniat la stanga");
+        p1.setAlignStrategy(new AlignLeft());
+
+        Paragraph p2 = new Paragraph("Text aliniat la dreapta");
+        p2.setAlignStrategy(new AlignRight());
+
+        Paragraph p3 = new Paragraph("Text nealiniat");
+
+        p1.print();
+        p2.print();
+        p3.print();
+
         noapteBuna.print();
     }
 
