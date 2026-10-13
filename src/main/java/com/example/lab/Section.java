@@ -17,6 +17,14 @@ public class Section implements Element{
     }
 
     @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Element child : children) {
+            child.accept(visitor);
+        }
+    }
+
+    @Override
     public void remove(Element element) {
         this.children.remove(element);
     }

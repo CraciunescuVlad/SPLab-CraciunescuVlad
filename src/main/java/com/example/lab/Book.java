@@ -31,4 +31,12 @@ public class Book extends Section{
             child.print();
         }
     }
+
+    @Override
+    public void accept(Visitor visitor)  {
+        visitor.visit(this);
+        for (Element child : children) {
+            child.accept(visitor);
+        }
+    }
 }
