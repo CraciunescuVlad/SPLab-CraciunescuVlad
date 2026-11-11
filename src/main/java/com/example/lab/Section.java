@@ -1,27 +1,39 @@
 package com.example.lab;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Section implements Element{
+@Entity
+public class Section extends BaseElement {
+
     protected String title;
+
+    @OneToMany(targetEntity = BaseElement.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected List<Element> children = new ArrayList<>();
 
-    public Section(String title){
+    public Section() {
+    }
+
+    public Section(String title) {
         this.title = title;
     }
 
-    @Override
-    public void add(Element element){
-        this.children.add(element);
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<Element> getChildren() {
+        return children;
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visit(this);
-        for (Element child : children) {
-            child.accept(visitor);
-        }
+    public void add(Element element) {
+        this.children.add(element);
     }
 
     @Override
@@ -39,6 +51,14 @@ public class Section implements Element{
         System.out.println(title);
         for (Element child : children) {
             child.print();
+        }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Element child : children) {
+            child.accept(visitor);
         }
     }
 }
