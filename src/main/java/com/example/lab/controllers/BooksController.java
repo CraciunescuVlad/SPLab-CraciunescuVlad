@@ -1,6 +1,7 @@
 package com.example.lab.controllers;
 
 import com.example.lab.Book;
+import com.example.lab.observer.AllBooksSubject;
 import com.example.lab.persistence.BooksRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,11 @@ import java.util.Optional;
 public class BooksController {
 
     private final BooksRepository booksRepository;
+    private final AllBooksSubject allBooksSubject;
 
-    public BooksController(BooksRepository booksRepository) {
+    public BooksController(BooksRepository booksRepository, AllBooksSubject allBooksSubject) {
         this.booksRepository = booksRepository;
+        this.allBooksSubject = allBooksSubject;
     }
 
     @GetMapping
@@ -32,9 +35,10 @@ public class BooksController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody Book newBook) {
+    public ResponseEntity<String> newBook(@RequestBody Book newBook) {
         Book savedBook = booksRepository.save(newBook);
-        return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
+        allBooksSubject.add(savedBook);
+        return new ResponseEntity<>("Book saved [" + savedBook.getId() + "] " + savedBook.getTitle(), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -43,8 +47,7 @@ public class BooksController {
             return ResponseEntity.notFound().build();
         }
         updatedBook.setId(id);
-        Book saved = booksRepository.save(updatedBook);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(booksRepository.save(updatedBook));
     }
 
     @DeleteMapping("/{id}")
